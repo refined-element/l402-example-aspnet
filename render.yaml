@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: l402-example-aspnet
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: LightningEnable__ApiKey
+        sync: false  # set in Render dashboard, don't commit
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+    healthCheckPath: /api/free/health
