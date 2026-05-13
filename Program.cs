@@ -45,13 +45,20 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 // L402 middleware — placed after routing so it can read [L402] attribute
-// metadata from the matched endpoint. Configured with a PriceSelector that
-// overrides per-attribute prices to charge 500 sats for ?model=premium.
+// metadata from the matched endpoint. The PriceSelector only kicks in for
+// /api/premium/* requests with ?model=premium to bump the price to 500 sats;
+// for everything else it returns null so the gating falls back to the
+// [L402] attribute (or no gating, if the route has no attribute).
 app.UseRouting();
 app.UseL402(opts =>
 {
     opts.PriceSelector = ctx =>
-        ValueTask.FromResult(ctx.Request.Query["model"] == "premium" ? 500 : 100);
+    {
+        var path = ctx.Request.Path.Value ?? "";
+        if (!path.StartsWith("/api/premium/")) return ValueTask.FromResult<int?>(null);
+        if (ctx.Request.Query["model"] == "premium") return ValueTask.FromResult<int?>(500);
+        return ValueTask.FromResult<int?>(null);
+    };
 });
 
 // ---------------------------------------------------------------------------

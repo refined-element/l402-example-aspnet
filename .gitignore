@@ -11,3 +11,4 @@ appsettings.Development.json
 TestResults/
 *.lock.json
 *.binlog
+nuget.config
