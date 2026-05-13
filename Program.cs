@@ -54,9 +54,12 @@ app.UseL402(opts =>
 {
     opts.PriceSelector = ctx =>
     {
-        var path = ctx.Request.Path.Value ?? "";
-        if (!path.StartsWith("/api/premium/")) return ValueTask.FromResult<int?>(null);
-        if (ctx.Request.Query["model"] == "premium") return ValueTask.FromResult<int?>(500);
+        // Use PathString.StartsWithSegments so we match on segment boundaries
+        // (not raw prefix) and stay culture-independent. "/api/premium-foo" is
+        // NOT treated as starting with the "/api/premium" segment.
+        if (!ctx.Request.Path.StartsWithSegments("/api/premium")) return ValueTask.FromResult<int?>(null);
+        if (string.Equals(ctx.Request.Query["model"], "premium", StringComparison.Ordinal))
+            return ValueTask.FromResult<int?>(500);
         return ValueTask.FromResult<int?>(null);
     };
 });
