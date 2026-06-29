@@ -1,5 +1,8 @@
 # l402-example-aspnet
 
+[![Discord](https://img.shields.io/discord/1405389254892195951?label=community&logo=discord&color=5865F2)](https://discord.gg/rX7NxHY8vx)
+
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **A live reference app for [Native L402 integration](https://docs.lightningenable.com/products/l402-microtransactions/native-integration) on ASP.NET Core (.NET 8).** Curl it from your terminal and watch a `402 Payment Required` come back with a real Lightning invoice.
